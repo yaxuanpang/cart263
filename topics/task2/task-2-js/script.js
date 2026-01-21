@@ -11,7 +11,7 @@ function setup() {
 
     // console.log(document.getElementsByTagName("p"));
 
-    /***OUTPUT: 
+    /***OUTPUT:
      * HTMLCollection(9) [p#1, p#2.img-descript, p#3.img-descript, p#4.img-descript, p#5.img-descript, p#6.img-descript, p#7.img-descript, p#8.img-descript, p#9.img-descript]
      */
 
@@ -58,7 +58,7 @@ function setup() {
 
     // console.log(document.querySelectorAll("h2"));
 
-    /***OUTPUT: 
+    /***OUTPUT:
      * NodeList [h2]
      * 0: h2
      * length: 1
@@ -86,7 +86,7 @@ function setup() {
 
     // console.log(document.getElementById("parent"));
 
-    /***OUTPUT: 
+    /***OUTPUT:
      * <section id="parent"></section>
      */
 
@@ -190,26 +190,47 @@ function setup() {
     /* 1E:  Set the background of this paragraph element to be green */
     /* 1F:  Set the color of the text in this paragraph element to be white */
     /* 1G: Append this new element to the parent variable within the function. */
-    /* 1H: Iterate through the allPTagsThree array and call customCreateElement(), 
+    /* 1H: Iterate through the allPTagsThree array and call customCreateElement(),
     passing the current allPTagsThree element as the parent with each iteration.*/
     /***CODE */
 
+    let allPTagsThree = document.querySelectorAll("p");
+
+    function customCreateElement(parent) {
+        let newPara = document.createElement("p");
+
+        newPara.textContent = "new paragraph";
+        newPara.style.backgroundColor = "green";
+        newPara.style.color = "white";
+
+        parent.appendChild(newPara);
+    }
+
+    for (let pTag of allPTagsThree) {
+        customCreateElement(pTag);
+    }
 
     /***EXPLANATION::
-     * 
-     * 
+     * The first line accesses all paragraph elemnts and stores them in a variable called allTagsThree
+     * Then in the function customCreateElement(parent), I created a new paragraph. I changed the content of the text, 
+     * the color is white and the background color is green by calling newPara
+     * I appended the new paragraph to the parent variable so that the new paragraph is palced inside the parent element
+     * The for loop goes through the allTagsThree list and calls it pTag
+     * The function customCreateElement(pTag) passes through the paragraph pTag as the parent
+     * Because there are 9 paragraphs the loop runs 9 times and there is a new paragraph with the properties that I set
+     * in each one
      */
 
     /*************************************** */
     /* 2: GRID OF BOXES */
     /* 2A: Create another new function: function customNewBoxCreate(parent){ //body }*/
-    /* 2B: In the body of customNewBoxCreate create a new div element, that has the class testDiv. 
+    /* 2B: In the body of customNewBoxCreate create a new div element, that has the class testDiv.
     /* 2C:Then append this new element to the parent variable within the function. 
     /* 2D:Finally, return</code> this new element */
-    /* 2E:Create a nested for loop (for rows and columns) to iterate through 10 columns and 10 rows (just like the JS Review :)). 
+    /* 2E:Create a nested for loop (for rows and columns) to iterate through 10 columns and 10 rows (just like the JS Review :)).
         Call the customNewBoxCreate function, in order to generate a new div -> representing each cell in the grid. 
         Ensure that the parent element for each of these new divs is the element whose id is named `new-grid`*/
-    /* 2F: You will see at this point that the x,y position of the resulting divs makes no sense... 
+    /* 2F: You will see at this point that the x,y position of the resulting divs makes no sense...
         Fix this by doing the following: every time you call customNewBoxCreate() - save the current returned element 
         in a variable i.e. returnedDiv. 
         Set the style (left and top) to the of this element to 
@@ -222,32 +243,94 @@ function setup() {
 
     /***CODE */
 
+    function customNewBoxCreate(parent) {
+        let newDiv = document.createElement("div");
+        newDiv.className = "testDiv";
+        parent.appendChild(newDiv);
+        return newDiv;
+    }
+
+    let gridParent = document.getElementById("new-grid");
+
+    for (let row = 0; row < 10; row++) {
+        for (let col = 0; col < 10; col++) {
+
+            let returnedDiv = customNewBoxCreate(gridParent);
+
+            returnedDiv.style.left = (col * 46.45) + "px";
+            returnedDiv.style.top = (row * 46.45) + "px";
+
+            if (row % 2 === 0) {
+                returnedDiv.style.backgroundColor = "white";
+                returnedDiv.textContent = "EVEN";
+            }
+            else {
+                returnedDiv.style.backgroundColor = "purple";
+                returnedDiv.textContent = "ODD";
+            }
+        }
+    }
 
     /***EXPLANATION::
-     * 
-     * 
+     * I created a new function called customNewBoxCreate(parent)
+     * I first created a new div element that has a class called testDiv and appended it to the parent variable
+     * The last line return newDIv, save the box into a new variable outside the function to do more things to it later
+     * I created a grid that is 10x10 and saved newDiv into returnedDiv every time customNewBoxCreate is called
+     * I adjusted the position of the grid
+     * I made every row is divisible by 2 say "even" and white and every odd one say "odd" and purple
      */
 
     /*************************************** */
     /* 3: GRID OF BOXES II */
 
-    /* 3A: Create ANOTHER nested for loop - in order to generate a new grid ... 
+    /* 3A: Create ANOTHER nested for loop - in order to generate a new grid ...
         USE the same customNewBoxCreate function..., the only difference is that the parent element 
         for each of these new divs is the element whose id is `new-grid-three`. */
-    /* 3B: Then: write the code to check when a column is a multiple of 3 (no remainder), 
+    /* 3B: Then: write the code to check when a column is a multiple of 3 (no remainder),
         when it is a column where the remainder is 1 or when the remainder is 2 ... 
         HINT:: look up the % operator.. */
-    /* 3C: Then for each of the above cases: give the new divs in the first case a background of red, 
+    /* 3C: Then for each of the above cases: give the new divs in the first case a background of red,
             then the second a background of orange and the third yellow. */
-    /*  3D: Finally, let each div contain the text content representing the associated remainder 
+    /*  3D: Finally, let each div contain the text content representing the associated remainder
         when dividing by three. */
 
     /***CODE */
 
+    let gridThreeParent = document.getElementById("new-grid-three");
+
+    for (let row = 0; row < 10; row++) {
+        for (let col = 0; col < 10; col++) {
+
+            let returnedDiv = customNewBoxCreate(gridThreeParent);
+
+            // Position the boxes
+            returnedDiv.style.left = (col * 46.45) + "px";
+            returnedDiv.style.top = (row * 46.45) + "px";
+
+            // Calculate the remainder once to use for both logic and text
+            let remainder = col % 3;
+
+            // Apply colors and set text content to the remainder value
+            if (remainder === 0) {
+                returnedDiv.style.backgroundColor = "red";
+                returnedDiv.textContent = remainder; // Will display "0"
+            }
+            else if (remainder === 1) {
+                returnedDiv.style.backgroundColor = "orange";
+                returnedDiv.textContent = remainder; // Will display "1"
+            }
+            else {
+                returnedDiv.style.backgroundColor = "yellow";
+                returnedDiv.textContent = remainder; // Will display "2"
+            }
+        }
+    }
+
 
     /***EXPLANATION::
-     * 
-     * 
+     * Created another nested loop to create a new 10x10 grid and made the parent element "new-grid-three"
+     * I made every vertical rows red, orange or yellow and made them display 0,1 and 2
+     * I made the color and numbers appear for each row with the remainder of the row number divided by 3
      */
 
     /*************************************** */
