@@ -3,13 +3,13 @@
     padding: 0;
 }
 
-body {
+/* body {
     background: rgb(49, 49, 49);
     color: white;
     font-family: 'Roboto', sans-serif;
     position: relative;
 
-}
+} */
 
 #parent {
     background: rgba(24, 24, 24);
@@ -25,8 +25,8 @@ body {
 
 .box {
     margin: 10px;
-    width: max-content;
-    min-height: 40px;
+    width: 20px;
+    min-height: 20px;
     padding: 1px;
     background: rgb(112, 184, 226);
     position: absolute;
@@ -39,16 +39,16 @@ body {
 
 }
 
-#textContainer {
+/* #textContainer {
     margin: 0 auto;
     width: 45vw;
     background: rgba(0, 0, 0);
     min-height: 200px;
     text-wrap: wrap;
-    /* style */
+    /* style
     border: solid;
     border-width: 2px;
     border-color: rgb(0, 183, 255);
     border-radius: 5px;
     padding: 12px;
-}
+} */
