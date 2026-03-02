@@ -3,25 +3,19 @@
     padding: 0;
 }
 
-/* body {
-    background: rgb(49, 49, 49);
-    color: white;
-    font-family: 'Roboto', sans-serif;
-    position: relative;
-
-} */
-
 #parent {
     background: rgba(24, 24, 24);
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
+    width: 95vw;
+    height: 90vh;
+    margin: auto;
     /* Add oveflow auto to container */
     overflow: auto;
-    margin-top: 10px;
+    margin-top: 30px;
     min-height: 500px;
-    position: absolute;
+    position: relative;
     left: 0px;
+    border: 2px solid rgb(0, 26, 255);
+    background-color: black;
 }
 
 .box {
@@ -37,19 +31,16 @@
     border-color: yellow;
     left: 0px;
     top: 0px;
-
 }
 
-/* #textContainer {
-    margin: 0 auto;
-    width: 45vw;
-    background: rgba(0, 0, 0);
-    min-height: 200px;
-    text-wrap: wrap;
-    /* style
+.target {
+    position: absolute;
+    margin: 10px;
+    width: 20px;
+    min-height: 20px;
+    padding: 1px;
+    background-color: blue;
     border: solid;
     border-width: 2px;
-    border-color: rgb(0, 183, 255);
-    border-radius: 5px;
-    padding: 12px;
-} */
+    border-color: rgb(255, 0, 0);
+}
