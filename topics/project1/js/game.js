@@ -7,10 +7,10 @@ window.onload = function () {
 
     setInterval(function () {
         snake.move();
-        snake.checkCollision(targetOne);
-        snake.checkCollision(targetTwo);
-        snake.checkCollision(birdOne);
-        snake.checkCollision(birdTwo);
+        snake.checkCollision(targetOne, "target");
+        snake.checkCollision(targetTwo, "target");
+        snake.checkCollision(birdOne, "bird");
+        snake.checkCollision(birdTwo, "bird");
         snake.renderSnake();
         targetOne.renderTarget();
         targetTwo.renderTarget();

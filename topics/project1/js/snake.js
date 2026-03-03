@@ -22,13 +22,20 @@ class Snake {
         this.elements.push(div);
     }
 
+    damage() {
+        if (this.segments.length > 1) { // don't remove the head
+            this.segments.pop(); // remove last segment data
+
+            const lastElement = this.elements.pop(); // remove last DOM element
+            lastElement.remove(); // remove from the page
+        }
+    }
+
     grow() {
         const tail = this.segments[this.segments.length - 1];
         this.segments.push(Object.assign({}, tail));
         this.addSegmentElement();
     }
-
-
 
 
     //move function
@@ -61,12 +68,30 @@ class Snake {
     }
 
     //checks for the collision between the snake and the targets
-    checkCollision(object) {
+    checkCollision(object, type) {
+
+        // calculating the number of grid squares apart the snake's 
+        // head is from the object horizontally and vertically
+        const dx = Math.abs(this.segments[0].x - object.x);
+        const dy = Math.abs(this.segments[0].y - object.y);
+
+        //checkes if the snake's head is on the same square or one square away from the object
         if (
-            this.segments[0].x === object.x &&
-            this.segments[0].y === object.y
+            (dx === 1 && dy === 0) ||
+            (dx === 0 && dy === 1) ||
+            (dx === 0 && dy === 0)
         ) {
-            this.grow();
+
+            //if the snake eats a target, it adds a square and if it eats a bird takes off a square
+            //both objects relocate after they are eaten
+            if (type === "target") {
+                this.grow();
+            }
+
+            if (type === "bird") {
+                this.damage();
+            }
+
             object.relocate();
         }
     }
