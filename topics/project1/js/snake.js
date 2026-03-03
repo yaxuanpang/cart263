@@ -29,6 +29,8 @@ class Snake {
     }
 
 
+
+
     //move function
     move() {
         for (let i = this.segments.length - 1; i > 0; i--) {
@@ -59,10 +61,13 @@ class Snake {
     }
 
     //checks for the collision between the snake and the targets
-    checkCollision(target) {
-        if (this.segments[0].x === target.x && this.segments[0].y === target.y) {
+    checkCollision(object) {
+        if (
+            this.segments[0].x === object.x &&
+            this.segments[0].y === object.y
+        ) {
             this.grow();
-            target.relocate();
+            object.relocate();
         }
     }
 

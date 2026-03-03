@@ -44,3 +44,16 @@
     border-width: 2px;
     border-color: rgb(255, 0, 0);
 }
+
+.bird {
+    position: absolute;
+    margin: 10px;
+    width: 20px;
+    min-height: 20px;
+    padding: 4px;
+    background-color: rgb(255, 170, 0);
+    border: solid;
+    border-width: 2px;
+    border-color: rgb(0, 55, 255);
+    border-radius: 25px;
+}
