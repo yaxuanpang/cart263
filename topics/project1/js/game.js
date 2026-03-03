@@ -9,12 +9,16 @@ window.onload = function () {
     let score = 0; //default at zero
     const scoreCounter = document.getElementById("score");
     scoreCounter.textContent = "Score: 0";
-    function updateScore() { //updates score by adding one each time
+    function increaseScore() { //updates score by adding one each time
         score++;
         scoreCounter.textContent = "Score: " + score;
     }
     function resetScore() { //resets score back to zero
         score = 0;
+        scoreCounter.textContent = "Score: " + score;
+    }
+    function decreaseScore() {
+        score--;
         scoreCounter.textContent = "Score: " + score;
     }
 
@@ -25,13 +29,17 @@ window.onload = function () {
             snake.resetSnake = false;
         }
         if (snake.checkCollision(targetOne, "target")) { //checks if snake collides with target, and if so it increments the score
-            updateScore();
+            increaseScore();
         }
         if (snake.checkCollision(targetTwo, "target")) {
-            updateScore();
+            increaseScore();
         }
-        snake.checkCollision(birdOne, "bird");
-        snake.checkCollision(birdTwo, "bird");
+        if (snake.checkCollision(birdOne, "bird")) {
+            decreaseScore();
+        }
+        if (snake.checkCollision(birdTwo, "bird")) {
+            decreaseScore();
+        }
         snake.renderSnake();
         targetOne.renderTarget();
         targetTwo.renderTarget();

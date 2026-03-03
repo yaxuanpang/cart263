@@ -29,6 +29,9 @@ class Snake {
             const lastElement = this.elements.pop(); // remove last DOM element
             lastElement.remove(); // remove from the page
         }
+        else {
+            this.reset();
+        }
     }
 
     grow() {
