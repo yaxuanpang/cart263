@@ -12,6 +12,9 @@ class Snake {
 
         //animate function
         this.animate();
+
+        //to render the snake immediatly when game starts (initial render)
+        this.renderSnake();
     }
 
     // append this to the box
@@ -20,15 +23,6 @@ class Snake {
         div.classList.add("box");
         this.parent.appendChild(div);
         this.elements.push(div);
-    }
-
-    damage() {
-        if (this.segments.length > 1) { // don't remove the head
-            this.segments.pop(); // remove last segment data
-
-            const lastElement = this.elements.pop(); // remove last DOM element
-            lastElement.remove(); // remove from the page
-        }
     }
 
     grow() {
@@ -52,8 +46,7 @@ class Snake {
         const maxX = Math.floor(this.parent.clientWidth / this.size) - 1;
         const maxY = Math.floor(this.parent.clientHeight / this.size) - 1;
 
-        if (this.segments[0].x < 0 || this.segments[0].x > maxX ||
-            this.segments[0].y < 0 || this.segments[0].y > maxY) {
+        if (this.segments[0].x < 0 || this.segments[0].x > maxX || this.segments[0].y < 0 || this.segments[0].y > maxY) {
             this.reset();
         }
     }
@@ -65,36 +58,15 @@ class Snake {
         this.elements = [this.elements[0]];
         this.speedX = 0;
         this.speedY = 0;
-        this.resetSnake = true;
+
+        this.resetSnake = true; //reset snake score when snake hits the sides
     }
 
-    //checks for the collision between the snake and the targets
-    checkCollision(object, type) {
-
-        // calculating the number of grid squares apart the snake's 
-        // head is from the object horizontally and vertically
-        const dx = Math.abs(this.segments[0].x - object.x);
-        const dy = Math.abs(this.segments[0].y - object.y);
-
-        //checkes if the snake's head is on the same square or one square away from the object
-        if (
-            (dx === 1 && dy === 0) ||
-            (dx === 0 && dy === 1) ||
-            (dx === 0 && dy === 0)
-        ) {
-
-            //if the snake eats a target, it adds a square and if it eats a bird takes off a square
-            //both objects relocate after they are eaten
-            if (type === "target") {
-                this.grow();
-            }
-
-            if (type === "bird") {
-                this.damage();
-            }
-
-            object.relocate();
-
+    //function that checks if snake eats the target, to be able to let know the informtation to the scoreCounter
+    checkSnakeEaten(target) {
+        if (this.segments[0].x === target.x && this.segments[0].y === target.y) {
+            this.grow();
+            target.relocate();
             return true;
         }
         return false;

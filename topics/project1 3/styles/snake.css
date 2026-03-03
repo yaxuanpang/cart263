@@ -11,25 +11,16 @@
     min-height: 500px;
     margin: 30px auto 0 auto;
     background-color: black;
-    border: 10px solid rgb(0, 26, 255);
-    border-style: groove;
-    border-radius: 10px;
+    border: 2px solid rgb(0, 26, 255);
     overflow: hidden;
 }
 
 .box {
-    margin: 10px;
-    width: 20px;
-    min-height: 20px;
-    padding: 1px;
-    background: rgb(112, 184, 226);
     position: absolute;
-    /* style */
-    border: solid;
-    border-width: 2px;
-    border-color: yellow;
-    left: 0px;
-    top: 0px;
+    width: 20px;
+    height: 20px;
+    background: rgb(112, 184, 226);
+    border: 2px solid yellow;
 }
 
 .target {
@@ -40,20 +31,7 @@
     border: 2px solid red;
 }
 
-.bird {
-    position: absolute;
-    margin: 10px;
-    width: 20px;
-    min-height: 20px;
-    padding: 4px;
-    background-color: rgb(255, 170, 0);
-    border: solid;
-    border-width: 2px;
-    border-color: rgb(0, 255, 4);
-    border-radius: 25px;
-}
-
-#score {
+#scoreCounter {
     position: fixed;
     top: 40px;
     right: 40px;
