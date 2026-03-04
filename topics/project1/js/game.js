@@ -1,15 +1,18 @@
 window.onload = function () {
     const startButton = document.querySelector('.startButton');
-
     startButton.addEventListener('click', function () {
         startButton.style.display = 'none';
         startGame();
     });
+
     function startGame() {
+        //defining the constants (snake, tragets)
         const snake = new Snake(10, 10);
         const targetOne = new Target();
         const targetTwo = new Target();
+        // defining the birds
         let birds = [];
+        window.currentBirds = birds;
 
         //SCORE
         let score = 0; //default at zero

@@ -57,18 +57,21 @@ class Snake {
 
         if (this.segments[0].x < 0 || this.segments[0].x > maxX ||
             this.segments[0].y < 0 || this.segments[0].y > maxY) {
-            this.reset();
+            this.reset(window.currentBirds);
         }
     }
 
-    // snake's original position
-    reset() {
+    // snake's original position and resets the whole game
+    reset(birds) {
         this.segments = [{ x: 10, y: 10 }];
         this.elements.slice(1).forEach(el => el.remove());
         this.elements = [this.elements[0]];
         this.speedX = 0;
         this.speedY = 0;
         this.resetSnake = true;
+        birds.forEach(bird => bird.birdElement.remove());
+        birds.length = 0;
+
     }
 
     //checks for the collision between the snake and the targets

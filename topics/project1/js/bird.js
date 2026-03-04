@@ -1,13 +1,15 @@
 class Bird {
-    constructor(size = 20) {
-        this.parent = document.querySelector("#parent");
-        this.size = size;
-        this.birdElement = document.createElement("div");
-        this.birdElement.classList.add("bird");
-        this.parent.appendChild(this.birdElement);
+    constructor(birds, size = 20) {
+        this.birds = birds; {
+            this.parent = document.querySelector("#parent");
+            this.size = size;
+            this.birdElement = document.createElement("div");
+            this.birdElement.classList.add("bird");
+            this.parent.appendChild(this.birdElement);
 
-        this.randomPosition();
-        this.renderBird();
+            this.randomPosition();
+            this.renderBird();
+        }
     }
 
     randomPosition() { //make sure the bird does not go outside of the grid
