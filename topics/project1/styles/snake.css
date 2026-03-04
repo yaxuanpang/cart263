@@ -15,6 +15,9 @@
     border-style: groove;
     border-radius: 10px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .box {
@@ -62,4 +65,19 @@
     color: white;
     padding: 10px 15px;
     z-index: 1000;
+}
+
+.startButton {
+    position: relative;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: black;
+    background: chartreuse;
+    border: none;
+    padding: 20px 60px;
+    cursor: pointer;
+
 }
