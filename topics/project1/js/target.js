@@ -1,11 +1,13 @@
 class Target {
-    constructor(size = 20) {
+    //constructor for the targets
+    constructor(size = 20) { // parameters
         this.parent = document.querySelector("#parent");
         this.size = size;
         this.targetElement = document.createElement("div");
         this.targetElement.classList.add("target");
-        this.parent.appendChild(this.targetElement);
+        this.parent.appendChild(this.targetElement); // appends it to the background
 
+        //renders the targets in a random position
         this.randomPosition();
         this.renderTarget();
     }
@@ -18,14 +20,14 @@ class Target {
         this.y = Math.floor(Math.random() * maxY);
     }
 
-    renderTarget() {
+    renderTarget() { // renders the targets
         this.targetElement.style.left = (this.x * this.size) + "px";
         this.targetElement.style.top = (this.y * this.size) + "px";
         this.targetElement.style.width = this.size + "px";
         this.targetElement.style.height = this.size + "px";
     }
 
-    //relocates the target when the target is eaten
+    //relocates the target when the target is eaten and the target reappears somewhere else
     relocate() {
         this.randomPosition();
         this.renderTarget();

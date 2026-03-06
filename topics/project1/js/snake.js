@@ -1,5 +1,5 @@
 class Snake {
-    //constructor
+    //constructor for the snake (position, size)
     constructor(x, y, size = 20) {
         this.parent = document.querySelector("#parent");
         this.size = size;
@@ -30,14 +30,14 @@ class Snake {
             lastElement.remove(); // remove from the page
         }
         else {
-            this.reset();
+            this.reset(window.currentBirds); // makes all the birds currenlty on the screen disappear
         }
     }
 
-    grow() {
-        const tail = this.segments[this.segments.length - 1];
+    grow() { // add one more square at the back
+        const tail = this.segments[this.segments.length - 1]; // everything is delayed by one square
         this.segments.push(Object.assign({}, tail));
-        this.addSegmentElement();
+        this.addSegmentElement(); // adds the square
     }
 
 
@@ -55,6 +55,7 @@ class Snake {
         const maxX = Math.floor(this.parent.clientWidth / this.size) - 1;
         const maxY = Math.floor(this.parent.clientHeight / this.size) - 1;
 
+        //if the snake gets out of the borders, all the birds on the screen reset (go back to 0)
         if (this.segments[0].x < 0 || this.segments[0].x > maxX ||
             this.segments[0].y < 0 || this.segments[0].y > maxY) {
             this.reset(window.currentBirds);

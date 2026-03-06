@@ -1,10 +1,12 @@
 window.onload = function () {
+    //a start button to start the game
     const startButton = document.querySelector('.startButton');
     startButton.addEventListener('click', function () {
         startButton.style.display = 'none';
         startGame();
     });
 
+    // function for the game mechanics
     function startGame() {
         //defining the constants (snake, tragets)
         const snake = new Snake(10, 10);
@@ -33,20 +35,23 @@ window.onload = function () {
 
         setInterval(function () {
             birds.push(new Bird());
-        }, 3000);
+        }, 3000); // pushes a new bird every 3 seconds
 
+        // everything here is repeated every 200 interval
         setInterval(function () {
             snake.move();
 
+            // if the snake resets, restSnake is false and the score resets
             if (snake.resetSnake) {
                 resetScore();
                 snake.resetSnake = false;
             }
 
+            // when the snake collides with target one or two the score increases
             if (snake.checkCollision(targetOne, "target")) increaseScore();
             if (snake.checkCollision(targetTwo, "target")) increaseScore();
 
-            // Check collision for all birds
+            // when the snake collides with a bird the score decreases
             for (let i = 0; i < birds.length; i++) {
                 if (snake.checkCollision(birds[i], "bird")) {
                     decreaseScore();

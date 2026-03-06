@@ -1,11 +1,12 @@
 class Bird {
+    //constructor for birds
     constructor(birds, size = 20) {
         this.birds = birds; {
             this.parent = document.querySelector("#parent");
             this.size = size;
             this.birdElement = document.createElement("div");
             this.birdElement.classList.add("bird");
-            this.parent.appendChild(this.birdElement);
+            this.parent.appendChild(this.birdElement); //appends the birds to the background
 
             this.randomPosition();
             this.renderBird();

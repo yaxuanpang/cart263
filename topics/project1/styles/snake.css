@@ -4,6 +4,7 @@
     box-sizing: border-box;
 }
 
+/*the box (game screen)*/
 #parent {
     position: relative;
     width: 95vw;
@@ -20,6 +21,7 @@
     justify-content: center;
 }
 
+/*snake'e head and body*/
 .box {
     margin: 10px;
     width: 20px;
@@ -35,6 +37,7 @@
     top: 0px;
 }
 
+/*targets*/
 .target {
     position: absolute;
     width: 20px;
@@ -43,6 +46,7 @@
     border: 2px solid red;
 }
 
+/*birds*/
 .bird {
     position: absolute;
     margin: 10px;
@@ -56,6 +60,7 @@
     border-radius: 25px;
 }
 
+/* score */
 #score {
     position: fixed;
     top: 40px;
@@ -67,6 +72,7 @@
     z-index: 1000;
 }
 
+/* start button */
 .startButton {
     position: relative;
     font-family: 'Orbitron', sans-serif;
