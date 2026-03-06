@@ -1,10 +1,55 @@
 window.onload = function () {
-    //a start button to start the game
+    //opening page
     const startButton = document.querySelector('.startButton');
+    //instructions page
+    const instructions = document.getElementById("instructions");
+    const playButton = document.getElementById("playButton");
+    //losing page
+    const restartButton = document.getElementById("restartButton");
+    const gameOver = document.getElementById("gameOver");
+    //score
+    const scoreCounter = document.getElementById("score");
+
+    //defining the game loop and if the birds appear or not
+    let gameLoop;
+    let showBird;
+
+
+    //after clicking startButton, instructions page shows up
     startButton.addEventListener('click', function () {
         startButton.style.display = 'none';
+        instructions.style.display = 'block';
+    });
+
+    //after clicking restartButton, game page shows up
+    restartButton.addEventListener("click", function () {
+        gameOver.style.display = 'none';
+        document.querySelectorAll('.box, .target, .bird').forEach(el => el.remove());
+        startGame();
+    })
+
+    //after clicking playButton, game page shows up
+    playButton.addEventListener('click', function () {
+        instructions.style.display = 'none';
         startGame();
     });
+
+    function endGame() {
+        const endScreen = document.getElementById('endScreen');
+        endScreen.style.display = 'none';
+        this.reset(window.currentBirds);
+
+    }
+
+    //function for the end of the game
+    function endGame() {
+        //Stop the game intervals
+        clearInterval(gameLoop);
+        clearInterval(showBird);
+
+        //Show the Game Over screen
+        gameOver.style.display = 'flex';
+    }
 
     // function for the game mechanics
     function startGame() {
@@ -18,7 +63,6 @@ window.onload = function () {
 
         //SCORE
         let score = 0; //default at zero
-        const scoreCounter = document.getElementById("score");
         scoreCounter.textContent = "Score: 0";
         function increaseScore() { //updates score by adding one each time
             score++;
@@ -33,18 +77,20 @@ window.onload = function () {
             scoreCounter.textContent = "Score: " + score;
         }
 
-        setInterval(function () {
+        showBird = setInterval(function () {
             birds.push(new Bird());
         }, 3000); // pushes a new bird every 3 seconds
 
         // everything here is repeated every 200 interval
-        setInterval(function () {
+        gameLoop = setInterval(function () {
             snake.move();
 
             // if the snake resets, restSnake is false and the score resets
             if (snake.resetSnake) {
-                resetScore();
-                snake.resetSnake = false;
+                endGame();
+                return;
+                // resetScore();
+                // snake.resetSnake = false;
             }
 
             // when the snake collides with target one or two the score increases

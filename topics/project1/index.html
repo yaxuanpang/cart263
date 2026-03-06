@@ -18,8 +18,31 @@
 <body>
     <div id="parent">
         <button class="startButton">START</button>
-    </div>
-    <div id="score">0</div>
+        <div id="score">0</div>
+        <div id="instructions" style="display:none;">
+            <h2>GAME INSTRUCTIONS</h2>
+            <br>
+            <p>Grow the snake as much as possible.</p>
+            <br>
+            <p>Use ➝ to go right</p>
+            <p>Use ← to go left</p>
+            <p>Use ↑ to go up</p>
+            <p>Use ↓ to go down</p>
+            <br>
+            <p>Do NOT hit the corners, as you will lose.</p>
+            <p>Avoid the green and orange birds, as you will lose a point.</p>
+            <br>
+            <p>Press PLAY to start!</p>
+            <button id="playButton">PLAY</button>
+        </div>
+        <div id="gameOver" style="display:none;">
+            <h1>Game Over!</h1>
+            <br>
+            <p>We told you not to touch the corners!</p>
+            <br>
+            <p>To play again, hit restart.</p>
+            <button id="restartButton">RESTART</button>
+        </div>
     </div>
 </body>
 

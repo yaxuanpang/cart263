@@ -87,3 +87,32 @@
     cursor: pointer;
 
 }
+
+/*Instructions & Losing page*/
+#instructions,
+#gameOver {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    background: black;
+    color: white;
+    padding: 40px;
+    border: 3px solid rgb(255, 0, 251);
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    z-index: 2000;
+}
+
+#instructions button,
+#gameOver button {
+    margin-top: 20px;
+    padding: 10px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: rgb(255, 0, 251);
+    border: none;
+    color: white;
+}

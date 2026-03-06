@@ -24,7 +24,7 @@ class Snake {
 
     damage() {
         if (this.segments.length > 1) { // don't remove the head
-            this.segments.pop(); // remove last segment data
+            this.segments.pop(); // remove last square
 
             const lastElement = this.elements.pop(); // remove last DOM element
             lastElement.remove(); // remove from the page
@@ -73,6 +73,11 @@ class Snake {
         birds.forEach(bird => bird.birdElement.remove());
         birds.length = 0;
 
+
+        //game over page
+        const gameOver = document.getElementById("gameOver");
+        gameOver.style.display = "flex";
+
     }
 
     //checks for the collision between the snake and the targets
@@ -83,7 +88,7 @@ class Snake {
         const dx = Math.abs(this.segments[0].x - object.x);
         const dy = Math.abs(this.segments[0].y - object.y);
 
-        //checkes if the snake's head is on the same square or one square away from the object
+        //checks if the snake's head is on the same square or one square away from the object
         if (
             (dx === 1 && dy === 0) ||
             (dx === 0 && dy === 1) ||

@@ -8,7 +8,7 @@ class Grid {
         this.rows = Math.floor(this.parent.clientHeight / this.cellSize); //width
     }
 
-    //render function, MAYBE do a grid CSS??? so no need to add these in here
+    //renders the grid the elements are moving on
     renderGrid() {
         for (let x = 0; x < this.columns; x++) {
             const vertical = document.createElement("div");
