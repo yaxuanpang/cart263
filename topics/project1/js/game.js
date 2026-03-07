@@ -12,7 +12,7 @@ window.onload = function () {
     //score
     const scoreCounter = document.getElementById("score");
 
-    //defining the game loop and if the birds appear or not
+    //defining the game loop and if the bird interval
     let gameLoop;
     let showBird;
 
@@ -48,7 +48,7 @@ window.onload = function () {
 
     //function for the end of the game
     function endGame() {
-        //Stop the game intervals
+        //Stops the game and clears all the birds
         clearInterval(gameLoop);
         clearInterval(showBird);
 
@@ -64,7 +64,7 @@ window.onload = function () {
         const targetTwo = new Target();
         // defining the birds
         let birds = [];
-        window.currentBirds = birds;
+        window.currentBirds = birds; // all the birds currenlty on the screen
 
         //SCORE
         let score = 0; //default at zero
@@ -75,8 +75,12 @@ window.onload = function () {
 
             //Win page appears when score gets to 50
             if (score >= 50) {
+
+                // stops the game and clears all the birds
                 clearInterval(gameLoop);
                 clearInterval(showBird);
+
+                // shows the winning page
                 startButton.style.display = 'flex';
                 gameWin.style.display = "flex";
             }
@@ -94,7 +98,7 @@ window.onload = function () {
         gameLoop = setInterval(function () {
             snake.move();
 
-            // if the snake resets, restSnake is false and the score resets
+            // if the snake resets, restSnake is false and the game ends
             if (snake.resetSnake) {
                 endGame();
                 return;
@@ -109,7 +113,7 @@ window.onload = function () {
                 if (snake.checkCollision(birds[i], "bird")) {
                     decreaseScore();
                 }
-                birds[i].renderBird();
+                birds[i].renderBird(); // a new bird is rendered in a random spot
             }
 
             snake.renderSnake();
