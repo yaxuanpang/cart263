@@ -5,8 +5,10 @@ window.onload = function () {
     const instructions = document.getElementById("instructions");
     const playButton = document.getElementById("playButton");
     //losing page
-    const restartButton = document.getElementById("restartButton");
+    const restartButton = document.querySelectorAll("#restartButton");
     const gameOver = document.getElementById("gameOver");
+    //winning page
+    const gameWin = document.getElementById("gameWin");
     //score
     const scoreCounter = document.getElementById("score");
 
@@ -22,10 +24,13 @@ window.onload = function () {
     });
 
     //after clicking restartButton, game page shows up
-    restartButton.addEventListener("click", function () {
-        gameOver.style.display = 'none';
-        document.querySelectorAll('.box, .target, .bird').forEach(el => el.remove());
-        startGame();
+    restartButton.forEach(button => {
+        button.addEventListener("click", function () {
+            gameOver.style.display = 'none';
+            gameWin.style.display = 'none';
+            location.reload();
+            document.querySelectorAll('.box, .target, .bird').forEach(el => el.remove());
+        })
     })
 
     //after clicking playButton, game page shows up
@@ -67,10 +72,14 @@ window.onload = function () {
         function increaseScore() { //updates score by adding one each time
             score++;
             scoreCounter.textContent = "Score: " + score;
-        }
-        function resetScore() { //resets score back to zero
-            score = 0;
-            scoreCounter.textContent = "Score: " + score;
+
+            //Win page appears when score gets to 50
+            if (score >= 50) {
+                clearInterval(gameLoop);
+                clearInterval(showBird);
+                startButton.style.display = 'flex';
+                gameWin.style.display = "flex";
+            }
         }
         function decreaseScore() {
             score--;
@@ -89,8 +98,6 @@ window.onload = function () {
             if (snake.resetSnake) {
                 endGame();
                 return;
-                // resetScore();
-                // snake.resetSnake = false;
             }
 
             // when the snake collides with target one or two the score increases
