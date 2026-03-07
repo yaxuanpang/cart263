@@ -84,13 +84,13 @@
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: black;
+    background-color: black;
     background: chartreuse;
     border: 10px solid chartreuse;
     border-style: groove;
+    border-color: chartreuse;
     padding: 20px 60px;
     cursor: pointer;
-
 }
 
 /*Instructions & Losing page*/
@@ -127,6 +127,8 @@
     border-color: rgb(255, 0, 251);
     color: white;
 }
+
+
 
 #bgAnimation {
     position: absolute;
