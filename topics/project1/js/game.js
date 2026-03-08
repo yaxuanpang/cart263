@@ -11,10 +11,25 @@ window.onload = function () {
     const gameWin = document.getElementById("gameWin");
     //score
     const scoreCounter = document.getElementById("score");
+    //heart
+    const heartContainer = document.getElementById("heartContainer");
+    heart = []; // array for the heart
+    heartContainer.innerHTML = '';
 
     //defining the game loop and if the bird interval
     let gameLoop;
     let showBird;
+    let birdCounter = 0;
+
+    //array of 5 hearts
+    for (let i = 0; i < 5; i++) {
+        const heartIcon = document.createElement('span');
+        heartIcon.innerText = '❤️';
+        heartIcon.style.fontSize = '24px';
+        heartIcon.style.margin = '0 2px';
+        heartContainer.appendChild(heartIcon);
+        heart.push(heartIcon);
+    }
 
 
     //after clicking startButton, instructions page shows up
@@ -86,8 +101,16 @@ window.onload = function () {
             }
         }
         function decreaseScore() {
+            if (birdCounter < heart.length) {
+                heart[birdCounter].style.visibility = 'hidden';
+            }
             score--;
             scoreCounter.textContent = "Score: " + score;
+            birdCounter++;
+
+            if (birdCounter === 5) {
+                endGame();
+            }
         }
 
         showBird = setInterval(function () {

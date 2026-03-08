@@ -21,6 +21,7 @@
         <canvas id="bgAnimation"></canvas>
         <button class="startButton">START</button>
         <div id="score">0</div>
+        <div id="heartContainer"></div>
         <div id="instructions" style="display:none;">
             <h2>GAME INSTRUCTIONS</h2>
             <br>
@@ -33,7 +34,8 @@
             <p>Use ↓ to go down</p>
             <br>
             <p>Do NOT hit the corners, as you will lose.</p>
-            <p>Avoid the green and orange circles, as you will lose a point.</p>
+            <p>Avoid the green and orange circles, as you will lose a point and a heart.</p>
+            <p>(Lose all the hearts and the game ends)</p>
             <br>
             <p>Press PLAY to start!</p>
             <button id="playButton">PLAY</button>
@@ -41,7 +43,7 @@
         <div id="gameOver" style="display:none;">
             <h1>Game Over!</h1>
             <br>
-            <p>We told you not to touch the corners!</p>
+            <p>We told you not to touch the corners or eat the circles!</p>
             <br>
             <p>To play again, hit restart.</p>
             <button id="restartButton">RESTART</button>

@@ -143,3 +143,13 @@
 .bird {
     z-index: 1;
 }
+
+#heartContainer {
+    position: absolute;
+    top: 15px;
+    /* Adjust based on where your score is */
+    left: 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    /* Optional: hides hearts from right to left */
+}
