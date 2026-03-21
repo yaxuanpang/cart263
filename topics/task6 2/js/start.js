@@ -35,6 +35,32 @@ function go_all_stuff() {
     drawingBoardB.addObj(new RectangularObj(100, 100, 50, 70, "#FF5733", "#E6E6FA", drawingBoardB.context))
     drawingBoardB.display();
 
+    // //adding the microphone to the second drawing board
+    // function animationLoop() {
+    //     drawingBoardA.animate();
+
+    //     if (analyser) {
+    //         analyser.getByteFrequencyData(dataArray);
+    //         drawingBoardB.micData = dataArray; // pass mic data
+    //     }
+
+    //     drawingBoardB.animate(); {
+    //         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    //         for (let i = 0; i < this.objectsOnCanvas.length; i++) {
+    //             if (this.micData) {
+    //                 this.objectsOnCanvas[i].micData = this.micData;
+    //             }
+    //             this.objectsOnCanvas[i].update();
+    //             this.objectsOnCanvas[i].display();
+    //         }
+    //     }
+    //     drawingBoardC.animate();
+    //     drawingBoardD.run(videoEl);
+
+    //     window.requestAnimationFrame(animationLoop);
+    // }
+
 
     let drawingBoardC = new DrawingBoard(theCanvases[2], theContexts[2], theCanvases[2].id);
     //add a freestyle object to canvas C
@@ -45,9 +71,13 @@ function go_all_stuff() {
     drawingBoardD.addObj(new VideoObj(0, 0, 400, 300, videoEl, drawingBoardD.context))
     drawingBoardD.display();
 
-    /*get microphone input*/
-    async function getMicrophoneInput() {
 
+    /**MICROPHONE */
+    let audioCtx;
+    let analyser;
+    let dataArray;
+
+    async function setupMic() {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioContext = new AudioContext();
 
@@ -91,11 +121,20 @@ function go_all_stuff() {
         catch (err) {
             console.log("had an error getting the microphone")
         }
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioCtx.createMediaStreamSource(stream);
 
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        source.connect(analyser);
     }
-    getMicrophoneInput();
 
-
+    setupMic();
 
     /*** RUN THE ANIMATION LOOP  */
     window.requestAnimationFrame(animationLoop);
@@ -103,6 +142,11 @@ function go_all_stuff() {
     function animationLoop() {
         /*** CALL THE EACH CANVAS TO ANIMATE INSIDE  */
         drawingBoardA.animate();
+        if (analyser && dataArray) {
+            analyser.getByteFrequencyData(dataArray);
+            console.log(dataArray);
+            drawingBoardB.micData = dataArray;
+        }
         drawingBoardB.animate();
         drawingBoardC.animate();
         drawingBoardD.run(videoEl)

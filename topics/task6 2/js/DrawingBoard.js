@@ -21,6 +21,14 @@ class DrawingBoard {
     this.canvas.addEventListener("mousemove", function (e) {
       self.overCanvas(e);
     });
+
+    window.addEventListener("keydown", function (e) {
+      if (e.key === "a" && self.drawingBoardId === "partA") {
+        if (self.objectsOnCanvas.length > 0) {
+          self.objectsOnCanvas.pop();
+        }
+      }
+    });
   }
 
   overCanvas(e) {
@@ -105,8 +113,11 @@ class DrawingBoard {
 
   /* method to add animate objects on canvas */
   animate() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     for (let i = 0; i < this.objectsOnCanvas.length; i++) {
-      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      if (this.micData) {
+        this.objectsOnCanvas[i].micData = this.micData;
+      }
       this.objectsOnCanvas[i].update();
       this.objectsOnCanvas[i].display();
     }
@@ -119,7 +130,6 @@ class DrawingBoard {
     }
 
   }
-
   getAverage(average) {
     if (this.drawingBoardId === "partC") {
       for (let i = 0; i < this.objectsOnCanvas.length; i++) {
