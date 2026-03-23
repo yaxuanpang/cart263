@@ -10,6 +10,7 @@ class VideoObj {
     this.shapeY = 10;
     this.shapeCol = "#000000";
 
+
     let filterButton_blur = document.getElementById("filter_button_blur");
     let blurInput = document.getElementById("blurnum");
 
@@ -38,7 +39,6 @@ class VideoObj {
       console.log(self.userProvidedBlur);
     });
 
-
     //ADDED THIS
     filterButton_sepia.addEventListener("click", function () {
       self.userProvidedSepia = sepiaInput.value;
@@ -64,7 +64,7 @@ class VideoObj {
   hue-rotate(${this.userProvidedHue}deg)
   invert(${this.userProvidedInvert}%)`;
 
-    //this.context.filter = `blur(${this.userProvidedBlur}px)`;
+
     this.context.drawImage(this.videoElement, this.x, this.y, this.w, this.h);
     this.context.fillStyle = this.shapeCol;
     this.context.fillRect(this.shapeX, this.shapeY, 50, 50)
@@ -73,15 +73,15 @@ class VideoObj {
 
   //called when rectangle color is to be updated
   changeColor(newCol) {
-    /** FILL IN */
     this.shapeCol = newCol; //ADDED THIS
   }
   //called when rectangle Pos is to be updated
   updatePositionRect(mx, my) {
-    /** FILL IN */
     this.shapeX = mx; //ADDED THIS
     this.shapeY = my;//ADDED THIS 
   }
+
+
   update(videoElement) {
     this.videoElement = videoElement;
   }
