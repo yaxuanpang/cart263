@@ -6,7 +6,7 @@ class FreeStyleObj {
     this.stroke_color = s_color;
     this.theta = 0;
     this.length = length;
-    this.yOffset = 40;
+    this.yOffset = 20;
     this.angularSpeed = 0.07;
     this.context = context;
     this.average = 0;

@@ -78,48 +78,38 @@ function go_all_stuff() {
     let dataArray;
 
     async function setupMic() {
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioContext = new AudioContext();
-
         try {
-            let audioStream = await navigator.mediaDevices.getUserMedia({
-                audio: true,
+            window.AudioContext = window.AudioContext || window.webkitAudioContext;
+            let audioContext = new AudioContext();
+
+            document.addEventListener("click", function () {
+                audioContext.resume();
             });
 
+            let audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
             let microphoneIn = audioContext.createMediaStreamSource(audioStream);
-
             const filter = audioContext.createBiquadFilter();
             const analyser = audioContext.createAnalyser();
-
             microphoneIn.connect(filter);
-
             filter.connect(analyser);
             analyser.fftSize = 32;
             let frequencyData = new Uint8Array(analyser.frequencyBinCount);
 
-            requestAnimationFrame(animateFrequencies);
-
             function animateFrequencies() {
-
                 analyser.getByteFrequencyData(frequencyData);
-                let average = 0;
                 let sum = 0;
                 for (let i = 0; i < frequencyData.length; i++) {
                     sum += frequencyData[i];
                 }
-
-                average = sum / frequencyData.length;
-
+                let average = sum / frequencyData.length;
+                drawingBoardB.getAverage(average);
                 drawingBoardC.getAverage(average);
-
-
-
                 requestAnimationFrame(animateFrequencies);
-
             }
-        }
-        catch (err) {
-            console.log("had an error getting the microphone")
+            requestAnimationFrame(animateFrequencies);
+
+        } catch (err) {
+            console.log("had an error getting the microphone");
         }
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
