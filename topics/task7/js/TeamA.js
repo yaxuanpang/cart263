@@ -90,6 +90,9 @@ export class PlanetA {
         ];
 
         // Loop through each donut
+        this.donuts = [];
+        this.donutAnimations = new Map();
+
         donutsData.forEach((data) => {
             gltfLoader.load('./models/donut.glb', (gltf) => {
                 const donut = gltf.scene;
@@ -121,6 +124,7 @@ export class PlanetA {
                 });
 
                 this.mesh.add(donut);
+                this.donuts.push(donut);
             });
         });
 
@@ -144,9 +148,36 @@ export class PlanetA {
         this.moons.forEach(moonPivot => {
             moonPivot.rotation.y += moonPivot.spiralMovement.speed * delta;
         });
+        this.donutAnimations.forEach((animate, donut) => {
+            animate.timer += delta;
+            donut.rotation.z += delta * 10;
+            if (animate.timer > 2.0) {
+                this.donutAnimations.delete(donut);
+            }
+        });
     }
 
     click(mouse, scene, camera) {
         //TODO: Do the raycasting here.
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouse, camera);
+
+        const clickableObjects = [];
+        this.donuts.forEach(donut => {
+            donut.traverse(child => {
+                if (child.isMesh) clickableObjects.push(child);
+            });
+        });
+
+        const intersects = raycaster.intersectObjects(clickableObjects);
+
+        if (intersects.length > 0) {
+            // Spin all donuts when any one is clicked
+            this.donuts.forEach(donut => {
+                if (!this.donutAnimations.has(donut)) {
+                    this.donutAnimations.set(donut, { timer: 0 });
+                }
+            });
+        }
     }
 }
