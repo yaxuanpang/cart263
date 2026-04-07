@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Snake Game</title>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="styles/snake.css" />
+    <script src="js/bird.js"></script>
+    <script src="js/target.js"></script>
+    <script src="js/snake.js"></script>
+    <script src="js/grid.js"></script>
+    <script src="js/background.js"></script>
+    <script src="js/game.js"></script>
+
+</head>
+
+<body>
+    <div id="parent">
+        <canvas id="bgAnimation"></canvas>
+        <button class="startButton">START</button>
+        <div id="score">0</div>
+        <div id="heartContainer"></div>
+        <div id="instructions" style="display:none;">
+            <h2>GAME INSTRUCTIONS</h2>
+            <br>
+            <p>Grow the snake as much as possible.</p>
+            <p>(50 points to win)</p>
+            <br>
+            <p>Use ➝ to go right</p>
+            <p>Use ← to go left</p>
+            <p>Use ↑ to go up</p>
+            <p>Use ↓ to go down</p>
+            <br>
+            <p>Do NOT hit the corners, as you will lose.</p>
+            <p>Avoid the green and orange circles, as you will lose a point and a heart.</p>
+            <p>(Lose all the hearts and the game ends)</p>
+            <br>
+            <p>Press PLAY to start!</p>
+            <button id="playButton">PLAY</button>
+        </div>
+        <div id="gameOver" style="display:none;">
+            <h1>Game Over!</h1>
+            <br>
+            <p>We told you not to touch the corners or eat the circles!</p>
+            <br>
+            <p>To play again, hit restart.</p>
+            <button id="restartButton">RESTART</button>
+        </div>
+        <div id="gameWin" style="display: none;">
+            <h1>WOW! You won!</h1>
+            <br>
+            <p>Congratulations!</p>
+            <p>Thank you so much for playing our game, dear winner.</p>
+            <br>
+            <p>If you want to play again, hit restart.</p>
+            <button id="restartButton">RESTART</button>
+        </div>
+    </div>
+</body>
+
+</html>
