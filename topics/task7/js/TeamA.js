@@ -13,7 +13,7 @@ export class PlanetA {
         this.group = new THREE.Group();
 
         const loader = new THREE.TextureLoader();
-        const texture = loader.load("./image/planetTexture.png");
+        const texture = loader.load("texture/planetTexture.JPG");
 
         // Create planet
 
@@ -48,7 +48,7 @@ export class PlanetA {
         //TODO: Add from 1 to 3 orbiting moons to the planet group.
         //TODO: The moons should rotate around the planet just like the planet group rotates around the Sun.
         this.moons = []; //Array to store moons
-        const moonTexture = loader.load("./image/moonTexture.png");
+        const moonTexture = loader.load("texture/planetTexture.JPG");
 
         for (let i = 0; i < 2; i++) {  //only want 2 mooons
             const moonGeometry = new THREE.SphereGeometry(1, 16, 16);
