@@ -1,19 +1,15 @@
-//importing three.js library
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js";
 
-//scene
 const canvas = document.querySelector("#snakeGame");
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
-//camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 let cameraRadius = 15;
-let cameraAngleY = Math.PI / 4; //horizontal rotation
-let cameraAngleX = Math.PI / 6; //vertical rotation
+let cameraAngleY = Math.PI / 4;
+let cameraAngleX = Math.PI / 6;
 updateCameraPosition();
 
-//function to define how the camera moves
 function updateCameraPosition() {
     camera.position.x = cameraRadius * Math.sin(cameraAngleY) * Math.cos(cameraAngleX);
     camera.position.y = cameraRadius * Math.sin(cameraAngleX);
@@ -21,28 +17,23 @@ function updateCameraPosition() {
     camera.lookAt(0, 0, 0);
 }
 
-//render
 const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-//resize canvas when the window is resized
 window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-//white stroked grid
 const gridSize = 10;
 const grid = new THREE.GridHelper(gridSize * 2, gridSize * 2);
 scene.add(grid);
 
-//movement of mouse to be able to drag along on the canvas
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
 
-//event listeners to define the interactions of user dragging the canvas
 canvas.addEventListener("mousedown", (e) => {
     isDragging = true;
     dragStartX = e.clientX;
@@ -62,35 +53,57 @@ canvas.addEventListener("mouseleave", () => {
 
 canvas.addEventListener("mousemove", (e) => {
     if (!isDragging) return;
-
     const dragX = e.clientX - dragStartX;
     const dragY = e.clientY - dragStartY;
-
     cameraAngleY -= dragX * 0.005;
     cameraAngleX -= dragY * 0.005;
     cameraAngleX = Math.max(-Math.PI / 2 + 0.1, Math.min(Math.PI / 2 - 0.1, cameraAngleX));
-
     dragStartX = e.clientX;
     dragStartY = e.clientY;
-
     updateCameraPosition();
 });
 
-//SNAKE CLASSS
+// MICROPHONE SETUP
+let audioContext, analyser, microphone;
+let micActive = false;
+
+async function setupMicrophone() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioContext = new AudioContext();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        microphone = audioContext.createMediaStreamSource(stream);
+        microphone.connect(analyser);
+        micActive = true;
+    } catch (err) {
+        console.error("Microphone access denied:", err);
+    }
+}
+
+function getVolume() {
+    if (!analyser) return 0;
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(data);
+    return data.reduce((a, b) => a + b, 0) / data.length;
+}
+
+setupMicrophone();
+
+// SNAKE CLASS
 class Snake {
     constructor(scene) {
         this.scene = scene;
-        this.direction = { x: 0, y: 0, z: 0 }; //starts being still
+        this.direction = { x: 0, y: 0, z: 0 };
         this.segments = [];
         this.meshes = [];
         this.resetPosition();
     }
 
-    //creating snake which is a cube
     createSnake() {
-        const snakee = new THREE.BoxGeometry(1, 1, 1);
+        const geo = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
-        const cube = new THREE.Mesh(snakee, material);
+        const cube = new THREE.Mesh(geo, material);
         this.scene.add(cube);
         this.meshes.push(cube);
     }
@@ -100,16 +113,13 @@ class Snake {
     }
 
     move() {
-        if (this.direction.x === 0 && this.direction.z === 0) return; //no movement if no direction is given to it
-
-        for (let i = this.segments.length - 1; i > 0; i--) { //makes the cubes that make up the snake move all coordinated
+        if (this.direction.x === 0 && this.direction.z === 0) return;
+        for (let i = this.segments.length - 1; i > 0; i--) {
             this.segments[i] = { ...this.segments[i - 1] };
         }
         this.segments[0].x += this.direction.x;
         this.segments[0].y += this.direction.y;
         this.segments[0].z += this.direction.z;
-
-        //check grid boundaries
         const edge = this.segments[0];
         if (
             edge.x < -gridSize || edge.x > gridSize ||
@@ -141,27 +151,22 @@ class Snake {
     }
 
     resetPosition() {
-        //reset at random position
         const x = Math.floor(Math.random() * (gridSize * 2 + 1) - gridSize);
         const z = Math.floor(Math.random() * (gridSize * 2 + 1) - gridSize);
-        const y = 0;
-
-        //removing extras
-        this.segments = [{ x, y, z }];
+        this.segments = [{ x, y: 0, z }];
         this.meshes.forEach((m) => this.scene.remove(m));
         this.meshes = [];
-
         this.direction = { x: 0, y: 0, z: 0 };
     }
 }
 
-//TARGET CLASSSS
+// TARGET CLASS
 class Target {
     constructor(scene) {
         this.scene = scene;
-        const target = new THREE.SphereGeometry(0.5, 16, 16);
+        const geo = new THREE.SphereGeometry(0.5, 16, 16);
         const material = new THREE.MeshBasicMaterial({ color: 0x87ceeb });
-        this.mesh = new THREE.Mesh(target, material);
+        this.mesh = new THREE.Mesh(geo, material);
         this.scene.add(this.mesh);
         this.relocate();
     }
@@ -174,11 +179,9 @@ class Target {
     }
 }
 
-//creating new objecys for snake and target
 const snake = new Snake(scene);
-const target = new Target(scene);
+const targets = [new Target(scene)];
 
-//user controlling the snake direction with keyboard arrows
 window.addEventListener("keydown", (e) => {
     switch (e.key) {
         case "ArrowUp": snake.setDirection(0, 0, -1); break;
@@ -189,22 +192,40 @@ window.addEventListener("keydown", (e) => {
 });
 
 let lastMove = 0;
+let lastCircleSpawn = 0;
 const speed = 200;
 
-//animate functionn
 function animate(time) {
     requestAnimationFrame(animate);
 
+    // Mic-driven target count
+    if (micActive) {
+        const volume = getVolume();
+        const desired = 1 + Math.floor(volume / 20);
+
+        if (targets.length < desired && time - lastCircleSpawn > 200) {
+            targets.push(new Target(scene));
+            lastCircleSpawn = time;
+        }
+        while (targets.length > desired && targets.length > 1) {
+            const t = targets.pop();
+            scene.remove(t.mesh);
+        }
+    }
+
     if (time - lastMove > speed) {
         snake.move();
-
-        if (snake.checkCollision(target)) {
-            snake.grow();
-            target.relocate();
+        for (let i = targets.length - 1; i >= 0; i--) {
+            if (snake.checkCollision(targets[i])) {
+                snake.grow();
+                targets[i].relocate();
+            }
         }
         lastMove = time;
     }
+
     snake.render();
     renderer.render(scene, camera);
 }
+
 animate();
