@@ -4,12 +4,79 @@
 <head>
     <meta charset="utf-8" />
     <title>3D Snake</title>
-    <link rel="stylesheet" href="css/snake.css" />
+    <link rel="stylesheet" href="styles/snake.css" />
 </head>
 
 <body>
+
+    <!-- INSTRUCTIONS SCREEN -->
+    <div id="instructions">
+        <h2>GAME INSTRUCTIONS</h2>
+        <p>Grow the snake as much as possible.</p>
+        <p>Use arrow keys to move.</p>
+        <p>Do NOT hit the sides.</p>
+        <p>
+            Your microphone controls targets.<br>
+            The louder, the more targets appear.
+        </p>
+        <p>Click and drag your mouse around to rotate the camera.</p>
+        <button id="playButton">PLAY</button>
+    </div>
+
+    <!--WINNING SCREEN-->
+    <div id="gameWin">
+        <h2>WOW! You won!</h2>
+
+        <p>Congratulations!<br>
+            Thank you so much for playing our game, dear winner.<br>
+            If you want to play again, hit restart.</p>
+        <button class="restartButton">RESTART</button>
+    </div>
+
+    <!--LOSING SCREEN-->
+    <div id="gameOver">
+        <h2>Game Over!</h2>
+        <br>
+        <p>We told you not to touch the sides!<br>
+            To play again, hit restart.
+        </p>
+        <button class="restartButton">RESTART</button>
+    </div>
+
+    <!-- GAME-->
     <canvas id="snakeGame"></canvas>
-    <script type="module" src="js/game.js"></script>
+
+    <script type="module">
+        //instructions
+        const playButton = document.getElementById("playButton");
+        const instructions = document.getElementById("instructions");
+        const canvas = document.getElementById("snakeGame");
+
+        //instructions screen before game
+        canvas.style.display = "none";
+        //game starts after clicking on button
+        playButton.addEventListener("click", async () => {
+            instructions.style.display = "none";
+            canvas.style.display = "block";
+
+            await import("./js/game.js");
+        });
+
+
+        //losing 
+        const restartButton = document.querySelectorAll(".restartButton");
+        const gameOver = document.getElementById("gameOver");
+        const gameWin = document.getElementById("gameWin");
+        restartButton.forEach(button => {
+            button.addEventListener("click", function () {
+                gameOver.style.display = 'none';
+                gameWin.style.display = 'none';
+                location.reload();
+            })
+        })
+
+    </script>
+
 </body>
 
 </html>
