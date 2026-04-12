@@ -5,10 +5,17 @@ const canvas = document.querySelector("#snakeGame");
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.9); //ADDED THIS ASH
+scene.add(ambientLight); //ADDED THIS ASH
+const directionalLight = new THREE.DirectionalLight(0xffffff, 9); //ADDED THIS ASH
+directionalLight.position.set(10, 20, 10); //ADDED THIS ASH
+scene.add(directionalLight); //ADDED THIS ASH
+
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-let cameraRadius = 15;
-let cameraAngleY = Math.PI / 4;
-let cameraAngleX = Math.PI / 6;
+let cameraRadius = 17;  //ADDED THIS ASH
+let cameraAngleY = 0;   //ADDED THIS ASH
+let cameraAngleX = 0.4;  //ADDED THIS ASH
 updateCameraPosition();
 
 function updateCameraPosition() {
@@ -34,6 +41,11 @@ scene.add(grid);
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
+let score = 0
+
+const collectSound = new Audio("./sounds/eat.mp3");
+const gameOverSound = new Audio("./sounds/die.mp3");
+const winSound = new Audio("./sounds/win.mp3");
 
 canvas.addEventListener("mousedown", (e) => {
     isDragging = true;
@@ -103,7 +115,9 @@ class Snake {
 
     createSnake() {
         const geo = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
+        const textureLoader = new THREE.TextureLoader(); //ADDED THIS ASH
+        const snakeTexture = textureLoader.load("./textures/snake.jpg"); //ADDED THIS ASH
+        const material = new THREE.MeshBasicMaterial({ map: snakeTexture }); //ADDED THIS ASH
         const cube = new THREE.Mesh(geo, material);
         this.scene.add(cube);
         this.meshes.push(cube);
@@ -127,6 +141,7 @@ class Snake {
             edge.z < -gridSize || edge.z > gridSize
         ) {
             gameEnded = true;
+            gameOverSound.play();
             document.getElementById("snakeGame").style.display = "none";
             document.getElementById("gameOver").style.display = "flex";
         }
@@ -161,6 +176,17 @@ class Snake {
         this.meshes = [];
         this.direction = { x: 0, y: 0, z: 0 };
     }
+    checkSelfCollision() {
+        const head = this.segments[0];
+        for (let i = 1; i < this.segments.length; i++) {
+            if (head.x === this.segments[i].x &&
+                head.y === this.segments[i].y &&
+                head.z === this.segments[i].z) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 // TARGET CLASS
@@ -168,7 +194,13 @@ class Target {
     constructor(scene) {
         this.scene = scene;
         const geo = new THREE.SphereGeometry(0.5, 16, 16);
-        const material = new THREE.MeshBasicMaterial({ color: 0x87ceeb });
+        const textureLoader = new THREE.TextureLoader(); //ADDED THIS ASH
+        const targetTexture = textureLoader.load("./textures/target.jpg"); //ADDED THIS ASH
+        const material = new THREE.MeshStandardMaterial({ //ADDED THIS ASH
+            map: targetTexture, //ADDED THIS ASH
+            roughness: 0.9, //ADDED THIS ASH
+            metalness: 0.1 //ADDED THIS ASH
+        });
         this.mesh = new THREE.Mesh(geo, material);
         this.scene.add(this.mesh);
         this.relocate();
@@ -196,7 +228,7 @@ window.addEventListener("keydown", (e) => {
 
 let lastMove = 0;
 let lastCircleSpawn = 0;
-const speed = 200;
+let speed = 200;
 
 function animate(time) {
     if (gameEnded) return;
@@ -219,20 +251,34 @@ function animate(time) {
 
     if (time - lastMove > speed) {
         snake.move();
+        if (snake.checkSelfCollision()) {
+            gameEnded = true;
+            gameOverSound.play();
+            document.getElementById("snakeGame").style.display = "none";
+            document.getElementById("gameOver").style.display = "flex";
+            return;
+        }
+
         for (let i = targets.length - 1; i >= 0; i--) {
-            // if (snake.checkCollision(targets[i])) {
-            //     snake.grow();
-            //     targets[i].relocate();
-            // }
             if (snake.checkCollision(targets[i])) {
-                gameEnded = true;
-                document.getElementById("snakeGame").style.display = "none";
-                document.getElementById("gameWin").style.display = "flex";
+                snake.grow();
+                score++;
+                speed = Math.max(80, speed - 40);
+                collectSound.play();
+
+                if (score > 20) {
+                    gameEnded = true;
+                    document.getElementById("snakeGame").style.display = "none";
+                    document.getElementById("gameWin").style.display = "flex";
+                    winSound.play();
+                    winSound.volume = 0.5;
+                } else {
+                    targets[i].relocate();
+                }
             }
         }
         lastMove = time;
     }
-
     snake.render();
     renderer.render(scene, camera);
 
