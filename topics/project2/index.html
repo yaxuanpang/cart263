@@ -44,6 +44,9 @@
         <button class="restartButton">RESTART</button>
     </div>
 
+    <!-- SCORE COUNTER -- ADDED THIS ASH-->
+    <div id="scoreDisplay">Score: 0</div>
+
     <!-- GAME-->
     <canvas id="snakeGame"></canvas>
 
@@ -59,8 +62,10 @@
         playButton.addEventListener("click", async () => {
             instructions.style.display = "none";
             canvas.style.display = "block";
-
             await import("./js/game.js");
+
+            document.getElementById("scoreDisplay").style.display = "block"; //ADDED THIS ASH
+            document.getElementById("scoreDisplay").textContent = "Score: 0"; //ADDED THIS ASH
         });
 
 

@@ -1,0 +1,221 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #0a0a0a, #000000);
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: white;
+}
+
+#snakeGame {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+}
+
+
+/* INSTRUCTIONS SCREEN */
+#instructions {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    z-index: 10;
+
+    background: black;
+}
+
+#instructions h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ff00ff;
+    text-shadow: 0 0 20px #ff00ff;
+}
+
+#instructions p {
+    max-width: 420px;
+    margin: 8px 0;
+    line-height: 1.5;
+    color: white;
+}
+
+#instructions p:nth-child(5) {
+    color: rgb(229, 44, 44);
+}
+
+/*BUTTONS */
+#playButton,
+.restartButton {
+    margin-top: 25px;
+    padding: 14px 32px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(45deg, #ff00ff, #ff66ff);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 15px #ff00ff;
+    transition: all 0.25s ease;
+}
+
+/*PLAY BUTTON*/
+#playButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #ff00ff, 0 0 50px #ff00ff;
+}
+
+#playButton:active {
+    transform: scale(0.95);
+}
+
+/*RESTART BUTTON*/
+.restartButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #ff00ff, 0 0 50px #ff00ff;
+}
+
+.restartButton:active {
+    transform: scale(0.95);
+}
+
+/*WINNING SCREEN*/
+/*LOSING SCREEN*/
+#gameWin,
+#gameOver {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    text-align: center;
+    z-index: 10;
+    background: black;
+}
+
+/*GAMEWIN*/
+#gameWin,
+#gameOver h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ff00ff;
+    text-shadow: 0 0 20px #ff00ff;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #0a0a0a, #000000);
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: white;
+}
+
+#snakeGame {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+}
+
+
+/*SCREENS*/
+#instructions,
+#gameWin,
+#gameOver {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    background: black;
+}
+
+#instructions h2,
+#gameWin h2,
+#gameOver h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ff00ff;
+    text-shadow: 0 0 20px #ff00ff;
+}
+
+#instructions p,
+#gameWin p,
+#gameOver p {
+    max-width: 420px;
+    margin: 8px 0;
+    line-height: 1.5;
+    color: white;
+}
+
+#gameWin p {
+    font-size: 15px;
+}
+
+#instructions p:nth-child(5) {
+    color: rgb(229, 44, 44);
+}
+
+/*HIDE WIN & LOSE SCREEN*/
+#gameWin,
+#gameOver {
+    display: none;
+}
+
+/*BUTTONS */
+#playButton,
+.restartButton {
+    margin-top: 25px;
+    padding: 14px 32px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(45deg, #ff00ff, #ff66ff);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 15px #ff00ff;
+    transition: all 0.25s ease;
+}
+
+/*PLAY BUTTON*/
+#playButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #ff00ff, 0 0 50px #ff00ff;
+}
+
+#playButton:active {
+    transform: scale(0.95);
+}
+
+/*RESTART BUTTON*/
+.restartButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #ff00ff, 0 0 50px #ff00ff;
+}
+
+.restartButton:active {
+    transform: scale(0.95);
+}
+
+/*ADDED THIS ASHHH*/
+#scoreDisplay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff00ff;
+    text-shadow: 0 0 10px #ff00ff;
+    z-index: 20;
+    display: none;
+}

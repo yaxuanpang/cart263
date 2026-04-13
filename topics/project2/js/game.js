@@ -1,5 +1,6 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js";
 
+const scoreDisplay = document.getElementById("scoreDisplay"); //ADDED THIS ASH
 let gameEnded = false;
 const canvas = document.querySelector("#snakeGame");
 const scene = new THREE.Scene();
@@ -214,6 +215,46 @@ class Target {
     }
 }
 
+//ADDED THIS ENTIRE FUNCTION ASHHHHH
+function createParticles(x, y, z) {
+    const particles = [];
+
+    for (let i = 0; i < 10; i++) {
+        const geo = new THREE.SphereGeometry(0.2, 5, 5);
+        const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
+        const particle = new THREE.Mesh(geo, material);
+
+        particle.position.set(x, y, z);
+
+        //when particles burst, it spawns in random directions
+        particle.userData.velocity = {
+            x: (Math.random() - 0.5) * 0.3,
+            y: Math.random() * 0.3,
+            z: (Math.random() - 0.5) * 0.3
+        };
+        scene.add(particle);
+        particles.push(particle);
+    }
+
+    let life = 20;
+
+    function animateParticles() {
+        life--;
+
+        particles.forEach(p => {
+            p.position.x += p.userData.velocity.x;
+            p.position.y += p.userData.velocity.y;
+            p.position.z += p.userData.velocity.z;
+        });
+        if (life > 0) {
+            requestAnimationFrame(animateParticles);
+        } else {
+            particles.forEach(p => scene.remove(p));
+        }
+    }
+    animateParticles();
+}
+
 const snake = new Snake(scene);
 const targets = [new Target(scene)];
 
@@ -256,13 +297,16 @@ function animate(time) {
             gameOverSound.play();
             document.getElementById("snakeGame").style.display = "none";
             document.getElementById("gameOver").style.display = "flex";
+            document.getElementById("scoreDisplay").style.display = "none"; //ADDED THIS ASH
             return;
         }
 
         for (let i = targets.length - 1; i >= 0; i--) {
             if (snake.checkCollision(targets[i])) {
+                createParticles(targets[i].x, targets[i].y, targets[i].z);  //ADDED THIS ASH
                 snake.grow();
                 score++;
+                scoreDisplay.textContent = "Score: " + score; //ADDED THIS ASH
                 speed = Math.max(80, speed - 40);
                 collectSound.play();
 
@@ -270,6 +314,7 @@ function animate(time) {
                     gameEnded = true;
                     document.getElementById("snakeGame").style.display = "none";
                     document.getElementById("gameWin").style.display = "flex";
+                    document.getElementById("scoreDisplay").style.display = "none"; //ADDED THIS ASH
                     winSound.play();
                     winSound.volume = 0.5;
                 } else {
