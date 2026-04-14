@@ -310,7 +310,7 @@ function animate(time) {
                 speed = Math.max(80, speed - 40);
                 collectSound.play();
 
-                if (score > 20) {
+                if (score >= 20) {
                     gameEnded = true;
                     document.getElementById("snakeGame").style.display = "none";
                     document.getElementById("gameWin").style.display = "flex";
