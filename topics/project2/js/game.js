@@ -1,22 +1,25 @@
+//importing three.js
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js";
 
-const scoreDisplay = document.getElementById("scoreDisplay"); //ADDED THIS ASH
+//variables
+const scoreDisplay = document.getElementById("scoreDisplay");
 let gameEnded = false;
 const canvas = document.querySelector("#snakeGame");
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
+//lights
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+scene.add(ambientLight);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 9);
+directionalLight.position.set(10, 20, 10);
+scene.add(directionalLight);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.9); //ADDED THIS ASH
-scene.add(ambientLight); //ADDED THIS ASH
-const directionalLight = new THREE.DirectionalLight(0xffffff, 9); //ADDED THIS ASH
-directionalLight.position.set(10, 20, 10); //ADDED THIS ASH
-scene.add(directionalLight); //ADDED THIS ASH
-
+//camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-let cameraRadius = 17;  //ADDED THIS ASH
-let cameraAngleY = 0;   //ADDED THIS ASH
-let cameraAngleX = 0.4;  //ADDED THIS ASH
+let cameraRadius = 17;
+let cameraAngleY = 0;
+let cameraAngleX = 0.4;
 updateCameraPosition();
 
 function updateCameraPosition() {
@@ -35,6 +38,7 @@ window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+//grid
 const gridSize = 10;
 const grid = new THREE.GridHelper(gridSize * 2, gridSize * 2);
 scene.add(grid);
@@ -42,12 +46,14 @@ scene.add(grid);
 let isDragging = false;
 let dragStartX = 0;
 let dragStartY = 0;
-let score = 0
+let score = 0 // score
 
+//sound effects (eats, win, dies)
 const collectSound = new Audio("./sounds/eat.mp3");
 const gameOverSound = new Audio("./sounds/die.mp3");
 const winSound = new Audio("./sounds/win.mp3");
 
+//if the player clicks down on the mouse and drags it, the camera angle moves
 canvas.addEventListener("mousedown", (e) => {
     isDragging = true;
     dragStartX = e.clientX;
@@ -77,6 +83,36 @@ canvas.addEventListener("mousemove", (e) => {
     updateCameraPosition();
 });
 
+//create stars
+function createStarfield() {
+    const count = 700;
+    const stars = [];
+    for (let i = 0; i < count; i++) {
+        const geo = new THREE.BufferGeometry();
+        //Creates an array of 3 numbers to store the star's x, y, z coordinates
+        const pos = new Float32Array(3);
+        //Creates an array of 3 numbers to store the star's x, y, z coordinates
+        pos[0] = (Math.random() - 0.5) * 200;
+        pos[1] = (Math.random() - 0.5) * 200;
+        pos[2] = (Math.random() - 0.5) * 200;
+        //Gives the position data to the geometry
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        const mat = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.5,
+            transparent: true,
+            opacity: Math.random() // random starting opacity
+        });
+        const star = new THREE.Points(geo, mat);
+        star.userData.speed = 0.0005 + Math.random() * 0.002; // each star flickers at its own speed
+        star.userData.offset = Math.random() * Math.PI * 2; // each star starts at a different phase
+        scene.add(star);
+        stars.push(star);
+    }
+    return stars;
+}
+const stars = createStarfield();
+
 // MICROPHONE SETUP
 let audioContext, analyser, microphone;
 let micActive = false;
@@ -94,7 +130,6 @@ async function setupMicrophone() {
         console.error("Microphone access denied:", err);
     }
 }
-
 function getVolume() {
     if (!analyser) return 0;
     const data = new Uint8Array(analyser.frequencyBinCount);
@@ -114,11 +149,12 @@ class Snake {
         this.resetPosition();
     }
 
+    // snake's texture, direction, movements
     createSnake() {
         const geo = new THREE.BoxGeometry(1, 1, 1);
-        const textureLoader = new THREE.TextureLoader(); //ADDED THIS ASH
-        const snakeTexture = textureLoader.load("./textures/snake.jpg"); //ADDED THIS ASH
-        const material = new THREE.MeshBasicMaterial({ map: snakeTexture }); //ADDED THIS ASH
+        const textureLoader = new THREE.TextureLoader();
+        const snakeTexture = textureLoader.load("./textures/snake.jpg");
+        const material = new THREE.MeshBasicMaterial({ map: snakeTexture });
         const cube = new THREE.Mesh(geo, material);
         this.scene.add(cube);
         this.meshes.push(cube);
@@ -137,6 +173,7 @@ class Snake {
         this.segments[0].y += this.direction.y;
         this.segments[0].z += this.direction.z;
         const edge = this.segments[0];
+        //checks for collisions with the grid
         if (
             edge.x < -gridSize || edge.x > gridSize ||
             edge.z < -gridSize || edge.z > gridSize
@@ -148,6 +185,7 @@ class Snake {
         }
     }
 
+    // add a cube behind the snake when it grows
     grow() {
         const tail = this.segments[this.segments.length - 1];
         this.segments.push({ ...tail });
@@ -161,6 +199,7 @@ class Snake {
         });
     }
 
+    //checks for collisions with the target
     checkCollision(target) {
         return (
             this.segments[0].x === target.x &&
@@ -169,6 +208,7 @@ class Snake {
         );
     }
 
+    //resets the position of the snake and removes extra cubes
     resetPosition() {
         const x = Math.floor(Math.random() * (gridSize * 2 + 1) - gridSize);
         const z = Math.floor(Math.random() * (gridSize * 2 + 1) - gridSize);
@@ -177,6 +217,7 @@ class Snake {
         this.meshes = [];
         this.direction = { x: 0, y: 0, z: 0 };
     }
+    //checks if the snake collides with itself
     checkSelfCollision() {
         const head = this.segments[0];
         for (let i = 1; i < this.segments.length; i++) {
@@ -195,18 +236,19 @@ class Target {
     constructor(scene) {
         this.scene = scene;
         const geo = new THREE.SphereGeometry(0.5, 16, 16);
-        const textureLoader = new THREE.TextureLoader(); //ADDED THIS ASH
-        const targetTexture = textureLoader.load("./textures/target.jpg"); //ADDED THIS ASH
-        const material = new THREE.MeshStandardMaterial({ //ADDED THIS ASH
-            map: targetTexture, //ADDED THIS ASH
-            roughness: 0.9, //ADDED THIS ASH
-            metalness: 0.1 //ADDED THIS ASH
+        const textureLoader = new THREE.TextureLoader();
+        const targetTexture = textureLoader.load("./textures/target.jpg");
+        const material = new THREE.MeshStandardMaterial({
+            map: targetTexture,
+            roughness: 0.9,
+            metalness: 0.1
         });
         this.mesh = new THREE.Mesh(geo, material);
         this.scene.add(this.mesh);
         this.relocate();
     }
 
+    //relocates the target when it gets eaten
     relocate() {
         this.x = Math.floor(Math.random() * (gridSize * 2 + 1) - gridSize);
         this.y = 0;
@@ -215,7 +257,7 @@ class Target {
     }
 }
 
-//ADDED THIS ENTIRE FUNCTION ASHHHHH
+//particles (confettis)
 function createParticles(x, y, z) {
     const particles = [];
 
@@ -258,6 +300,7 @@ function createParticles(x, y, z) {
 const snake = new Snake(scene);
 const targets = [new Target(scene)];
 
+//arrows make the snake move
 window.addEventListener("keydown", (e) => {
     switch (e.key) {
         case "ArrowUp": snake.setDirection(0, 0, -1); break;
@@ -272,10 +315,14 @@ let lastCircleSpawn = 0;
 let speed = 200;
 
 function animate(time) {
+    stars.forEach(star => {
+        star.material.opacity = 0.3 + Math.sin(time * star.userData.speed + star.userData.offset) * 0.7;
+    });
+
     if (gameEnded) return;
     requestAnimationFrame(animate);
 
-    // Mic-driven target count
+    //if the mic captures a certain volume threshold, it makes more targets
     if (micActive) {
         const volume = getVolume();
         const desired = 1 + Math.floor(volume / 20);
@@ -290,6 +337,7 @@ function animate(time) {
         }
     }
 
+    //if the snake collides with itself, it dies
     if (time - lastMove > speed) {
         snake.move();
         if (snake.checkSelfCollision()) {
@@ -297,16 +345,18 @@ function animate(time) {
             gameOverSound.play();
             document.getElementById("snakeGame").style.display = "none";
             document.getElementById("gameOver").style.display = "flex";
-            document.getElementById("scoreDisplay").style.display = "none"; //ADDED THIS ASH
+            document.getElementById("scoreDisplay").style.display = "none";
             return;
         }
 
+        // if the snake eats 20 target, the player wins
+        //every time it eats a target, particles, the snake will speed up
         for (let i = targets.length - 1; i >= 0; i--) {
             if (snake.checkCollision(targets[i])) {
-                createParticles(targets[i].x, targets[i].y, targets[i].z);  //ADDED THIS ASH
+                createParticles(targets[i].x, targets[i].y, targets[i].z);
                 snake.grow();
                 score++;
-                scoreDisplay.textContent = "Score: " + score; //ADDED THIS ASH
+                scoreDisplay.textContent = "Score: " + score;
                 speed = Math.max(80, speed - 40);
                 collectSound.play();
 
@@ -314,7 +364,7 @@ function animate(time) {
                     gameEnded = true;
                     document.getElementById("snakeGame").style.display = "none";
                     document.getElementById("gameWin").style.display = "flex";
-                    document.getElementById("scoreDisplay").style.display = "none"; //ADDED THIS ASH
+                    document.getElementById("scoreDisplay").style.display = "none";
                     winSound.play();
                     winSound.volume = 0.5;
                 } else {

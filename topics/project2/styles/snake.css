@@ -4,6 +4,7 @@ body {
     background: radial-gradient(circle at center, #0a0a0a, #000000);
     font-family: "Segoe UI", Arial, sans-serif;
     color: white;
+
 }
 
 #snakeGame {
